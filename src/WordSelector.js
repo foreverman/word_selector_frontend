@@ -27,7 +27,8 @@ class WordSelector extends Component {
   }
 
   onSuggestionsFetchRequested =({value}) => {
-    const apiUrl = 'http://localhost:3001/words/fuzzy_search';
+    const apiHost = process.env.REACT_APP_API_HOST || 'http://localhost:3001';
+    const apiUrl = `${apiHost}/words/fuzzy_search`;
     const postData = {
       word_input: value,
       words_excluded: this.props.selectedWords
