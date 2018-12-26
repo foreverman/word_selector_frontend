@@ -1,25 +1,35 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import WordSelector from './WordSelector'
+import WordList from './WordList'
+import {saveSelectedWord, getSelectedWords} from './selectedWordsAPI'
 
 class App extends Component {
+  state = {
+    selectedWords: []
+  }
+
+  onWordSelected = (event, {suggestion}) => {
+    saveSelectedWord(suggestion);
+    this.setState((prevState) => (
+      { selectedWords: prevState.selectedWords.concat([suggestion]) }
+    ));
+  }
+
+  componentDidMount = () => {
+    const selectedWords = getSelectedWords();
+    if (selectedWords.length > 0) {
+      this.setState({selectedWords: selectedWords});
+    }
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <WordSelector 
+          onWordSelected={this.onWordSelected} 
+          selectedWords={this.state.selectedWords}
+        />
+        <WordList words={this.state.selectedWords} />
       </div>
     );
   }
